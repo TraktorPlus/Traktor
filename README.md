@@ -52,7 +52,7 @@ Do NOT expect anonymity using this method. Privoxy is an http proxy and can leak
 ## Install
 ```bash
 $ sudo apt install net-tools
-$ wget https://gitlab.com/GNULand/TraktorPlus/Traktor/repository/master/archive.zip -O Traktor.zip
+$ wget https://github.com/TraktorPlus/Traktor/archive/master.zip -O Traktor.zip
 $ unzip Traktor.zip -d $HOME/Traktor && cd $HOME/Traktor/*
 $ chmod +x installer.sh
 $ ./installer.sh
