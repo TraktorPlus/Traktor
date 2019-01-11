@@ -1,0 +1,140 @@
+#!/bin/bash
+
+
+##################################################
+#                  Traktor V2.5                  #
+#     https://github.com/TraktorPlus/Traktor     #
+# https://gitlab.com/GNULand/TraktorPlus/Traktor #
+##################################################
+
+
+GRE='\033[92m' # Green Light
+RD='\033[91m' # Red Light
+LW='\033[97m' # White Light
+BLW='\033[1m' # Bold White Light
+NC='\033[0m' # White
+
+function help_print {
+    echo -e "$0:\n Usage: traktor [ -h | --help ], [ -o | --proxy-on ], [ -O | --proxy-off ],  [ -u | --uninstall ],   [ -U | --update ]"
+	exit 1
+}
+
+function restart {
+    sudo systemctl restart tor.service
+    echo "Done."
+    echo "[$(date)] tor restarted" | tee $HOME/.Traktor/Traktor_Log/traktor_status.log > /dev/null
+    exit 0
+}
+
+function proxyOff {
+    echo $XDG_CURRENT_DESKTOP | grep -i gnome >/dev/null
+    gnome=$?
+    echo $XDG_CURRENT_DESKTOP | grep -i xfce >/dev/null
+    xfce="$?"
+    echo $XDG_CURRENT_DESKTOP | grep -i kde >/dev/null
+    kde="$?"
+    if [ "$gnome" == "0" ] || [ "$xfce" == "0" ] ;then 
+        gsettings set org.gnome.system.proxy mode 'none'
+    elif [ "$kde" == "0" ];then
+        sed -i -- 's/ProxyType=.*/ProxyType=0/g' $HOME/.config/kioslaverc
+    else
+        echo "Your Desktop not Support"
+    fi
+
+}
+
+function proxyOn {
+    echo $XDG_CURRENT_DESKTOP | grep -i gnome >/dev/null
+    gnome=$?
+    echo $XDG_CURRENT_DESKTOP | grep -i xfce >/dev/null
+    xfce="$?"
+    echo $XDG_CURRENT_DESKTOP | grep -i kde >/dev/null
+    kde="$?"
+    if [ "$gnome" == "0" ] || [ "$xfce" == "0" ] ;then 
+        gsettings set org.gnome.system.proxy mode 'manual'
+    elif [ "$kde" == "0" ];then
+        sed -i -- 's/ProxyType=.*/ProxyType=1/g' $HOME/.config/kioslaverc
+    else
+        echo "Your Desktop not Support"
+    fi
+}
+
+function help { #need more commits
+	echo -e "OPTIONS        \n\n-help  |  -h          \n --uninstall  |  -u          Uninstalls the supported distro \n--restart  |  -r          Restarts the tor.service\n--proxy-off  |  -O          Disables the system wide proxy\n--proxy-on  |  -o          Enables the system wide proxy\n--update | -U          Update configer files\n\nhttps://gitlab.com/TraktorPlus/Traktor " | less
+	exit 0
+}
+
+function uninstall {
+    if zypper search i+ &> /dev/null; then
+        sudo chmod +x ./uninstall_opensuse.sh
+        ./uninstall_opensuse.sh 
+    elif apt list --installed &> /dev/null;then
+	    sudo chmod +x ./uninstall_debian.sh
+  	    ./uninstall_debian.sh
+    else
+	    echo "Your distro is neither debianbase nor susebase So, The script is not going to work in your distro."
+    fi
+    echo "[$(date)] traktor has been removed " | tee $HOME/.Traktor/Traktor_Log/traktor.log > /dev/null
+    exit 0
+}
+
+function none {	
+	echo -e 'Switch not defined .\nPlease read the help "./traktor.sh --help"'
+	exit 1
+}
+
+function update {
+    sudo uname -a &> /dev/null
+    mkdir -p /tmp/TraktorPlus
+    lctn="/tmp/TraktorPlus/torrc-`date +%M-%S`-Created"
+    wget https://gitlab.com/TraktorPlus/Traktor/raw/config/torrc -O $lctn 2> /dev/null 
+    wget_error="$?"
+    if [ "$wget_error" != "0" ] ;then
+        echo -e "\033[91mYou Have An ERROR!!!"
+    elif [ "$wget_error" == "4" ]; then
+        echo -e "\033[91mYou Have NetWork ERROR. check It. "
+    elif [ "$wget_error" == "8" ]; then
+        echo -e "\033[91mWe Can't Download torrc, becuase The AddreSs Hase Been Changed!!"
+    else
+        diff /etc/tor/torrc $lctn 1> /tmp/TraktorPlus/line_dif-torrc
+        lne=`cat /tmp/TraktorPlus/line_dif-torrc | wc -l`
+        if [ "$lne" != "0" ];then
+            echo -e "${LW}Your torrc file is ${BLW}not ${RD}up to date${NC}${LW}!" 
+            #if [ "$?" == "0" ];then
+            read -p "Do You Want Update torrc? [Y/n] " torc
+            if [ "$torc" == "Y" ] || [ "$torc" == "y" ] || [ "$torc" == "" ]; then
+                sudo cp $lctn /etc/tor/torrc
+                if [ "$?" == "0" ]; then
+                    echo -e "${GRE}Your torrc replace Sucsessfully!${NC}"
+                    read -p "Do You Want To Restart The Tor Service? [Y/n] " reset_tor
+                    if [ "$reset_tor" == "Y" ] || [ "$reset_tor" == "y" ] || [ "$reset_tor" == "" ]; then
+                        sudo service tor restart
+                        if [ "$?" == "0" ]; then
+                            echo -e "${GRE}Tor Service is Restarted Successfully!"
+                                else
+                            echo -e "${RD}I Can't Restart The Tor Service\nim So Sorry :(!"        
+                        fi
+                    else
+                        echo -e "${RD}If You Want To Restart that, Use this command:\nsudo service tor restart"        
+                    fi
+                fi
+            else
+                echo -e "${BLW}Ok, Bye Bye...!"
+                exit
+            fi
+        else
+            echo -e "${LW}Your torrc file is ${GRE}up to date."
+        fi
+    fi
+}
+
+case "$1" in
+	"") 	help_print 	;;
+	"--help" | "-h")	       help	   ;;
+	"--restart" | "-r")      restart   ;;
+	"--update" | "-U")	   update  ;;
+	"--proxy-on" | "-o")	    proxyOn   ;;
+	"--proxy-off" | "-O" )	proxyOff  ;;
+	"--uninstall" | "-un" ) uninstall  ;;
+	*)	        	none       ;; 
+esac

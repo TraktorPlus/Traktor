@@ -1,0 +1,102 @@
+2017-04-30 Version 1.6
+    1. fix tor icons
+    2. add new obfs3 bridges
+    3. add new obfs4 bridges
+    4. backup torrc file
+    5. added privoxy package
+    6. remove polipo package
+    7. change http port
+    
+2017-05-30 Verion 1.7
+    1. traktor is now supporting fedora
+    2. add traktor_fedora.sh file
+    3. remove unistall_debian.sh file
+    4. remove traktor_gui_panel folder
+    
+2017-07-10 Version 1.8
+    1. traktor is now supporting OpenSUSE
+    2. add traktor_opensuse.sh
+    
+2017-08-06 Version 1.9
+    1. add uninstall_debian.sh file for Removed Packages and Configured
+    2. v uninstall_opensuse.sh file for Removed Packages and Configured
+    3. edit show message
+    4. fix NetworkManager.conf
+    5. bug fixes
+    6. fix important issues
+    
+2017-11-08 Version 2
+    1. add fantasy installing process for traktor_debian.sh
+    2. add new obfs3 bridges
+    3. add new obfs4 bridges
+    4. add .Traktor folder on your HOME
+    5. add Traktor Panel (System Tray Icon)
+    6. add installer.sh file
+    7. add traktor file
+    8. traktor is now supporting Gnome, XFCE and KDE Desktop
+    9. add '--update' Option Command for Update torrc
+    10. remove traktor.sh file 
+    11. control traktor with command-line by Swtich
+    12. edited torrc file
+    13. Change README.md
+    14. Change CHANGELOG
+    15. bug fixes
+    16. fix important issues
+    17. add more bugs to fix later
+    
+2017-12-27 Version 2.1
+    1. fix apt problem when found new Update for tor and apparmor packages
+    2. fix bug installer.sh file
+    3. add fantasy installing process for traktor_opensuse.sh
+    4. smarter Installation
+    5. traktor_opensuse is now supporting KDE
+    6. add dns-fixer.sh file
+
+2018-01-16 Version 2.2
+    1. traktor is now supporting Unity and LXDE Desktop
+    2. add resolvconf package
+    3. add TorDNS and OpenDNS to resolv.conf
+    4. add new uninstall version for traktor_debian.sh
+    5. add new obfs3 bridges
+    6. add new obfs4 bridges
+    7. add dns.log file
+    8. remove dns-fixer.sh file
+    9. Change README.md
+    10. Change CHANGELOG
+    11. fix apt bug
+    12. fix important issues
+    13. bug fixes
+    14. edited torrc file
+    15. Currently, Fedora isn't supported by Traktor
+    16. Currently, Arch isn't supported by Traktor
+    17. added more bugs to fix later
+    
+2018-02-14 Version 2.3
+    1. new Traktor Panel (indicator [or system try icon])
+    2. change Traktor Panel icons
+    3. fix torrc bug
+    4. fix libssl address
+    5. added more bugs to fix later
+    
+2018-03-05 Version 2.4
+    1. Trakor is now have a Gnome Extension
+    2. New uninstall_debian.sh
+    3. fix traktor_debian.sh bug
+    4. add "rslv" function in traktor_debian.sh
+    5. remove "panel" function in traktor_debian.sh
+    6. remove Traktor-Panel folder
+    7. add more bugs to fix later
+    
+2018-04-19 Version 2.5
+    1. fix unity support
+    2. fix torrc bug
+    3. fix boot function
+    4. change Arch Installer
+    5. change Fedora Installer
+    6. change README.md
+    7. change installer.sh
+    8. chanfe trktor_debian.sh
+    9. add traktor-plus.sh
+    10. add torrc-gen.py
+    11. add traktor_raspberry.sh
+    12. add Wiki on GitLab
